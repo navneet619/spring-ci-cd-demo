@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17 # Or 'java: corretto11' if you're using Java 11
+  pre_build:
+    commands:
+      - echo "Running pre-build commands..."
+      - mvn clean install -DskipTests
+  build:
+    commands:
+      - echo "Building the application..."
+      - mvn test # Run tests here
+  post_build:
+    commands:
+      - echo "Build completed successfully. Packaging artifacts..."
+      # If deploying JAR directly:
+      - mv target/*.jar spring-ci-cd-demo.jar
+      - cp appspec.yml .
+      - cp -R scripts .
+
+artifacts:
+  files:
+    - spring-ci-cd-demo.jar
+    - appspec.yml
+    - scripts/**/* # Include all files in the scripts directory
+  discard-paths: no # Keep the directory structure
