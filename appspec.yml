@@ -11,15 +11,27 @@ files:
     destination: /opt/codedeploy-app/scripts/
 
 permissions:
-  - object: /opt/codedeploy-app/
-    pattern: "**"
-    owner: ec2-user
-    group: ec2-user
-    mode: 755 # Execute for owner/group, read for others (for scripts and directories)
+  # Permissions for the JAR file
   - object: /opt/codedeploy-app/spring-ci-cd-demo.jar
     owner: ec2-user
     group: ec2-user
-    mode: 644 # Read/write for owner, read for group/others (for the JAR file)
+    mode: 644 # Read/write for owner, read-only for group/others - standard for non-executable files
+
+  # Permissions for the appspec.yml file (often similar to JAR, or just read-only)
+  - object: /opt/codedeploy-app/appspec.yml
+    owner: ec2-user
+    group: ec2-user
+    mode: 644
+
+  # Permissions for the scripts directory and its contents
+  - object: /opt/codedeploy-app/scripts/
+    pattern: "**" # Applies to the directory itself AND all files within it
+    owner: ec2-user
+    group: ec2-user
+    mode: 755 # Execute for owner/group/others - essential for scripts
+    type:
+      - file
+      - directory #
 
 hooks:
   ApplicationStop:

@@ -16,8 +16,7 @@ phases:
     commands:
       - echo "Build completed successfully. Packaging artifacts..."
       - mv target/*.jar spring-ci-cd-demo.jar
-      - echo "Listing root directory contents before artifact collection:"
-      - ls -laR . # List all files and directories recursively from the current directory
+
 artifacts:
   files:
     - spring-ci-cd-demo.jar
