@@ -1,5 +1,16 @@
 #!/bin/bash
-is_running=$(ps -ef | grep 'spring-ci-cd-demo' | grep -v grep | wc -l)
-if [ $is_running -gt 0 ]; then
-    pkill -f 'spring-ci-cd-demo'
+# Stop the Spring Boot application if it's running
+
+echo "Stopping application..."
+
+# Find the process ID (PID) of the Spring Boot app
+# We use 'grep -f' to match the full path of the JAR if possible, or just the app name
+PID=$(ps -ef | grep 'spring-ci-cd-demo.jar' | grep -v grep | awk '{print $2}')
+
+if [ -z "$PID" ]; then
+    echo "Spring Boot application is not running."
+else
+    echo "Found running Spring Boot application with PID: $PID. Killing it..."
+    kill -9 "$PID"
+    echo "Application stopped."
 fi
